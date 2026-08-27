@@ -5,7 +5,7 @@ Technique d'empilement
 
 Côté serveur : Python / Flask + Flask-SocketIO
 
-Base de données : MySQL (via SQLAlchemy + PyMySQL)
+Base de données : MySQL (via SQLAlchemy + PyMySQL) 
 
 Authentification : Flask-Login + Flask-Bcrypt
 
