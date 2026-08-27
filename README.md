@@ -49,7 +49,7 @@ Bash
 python app.py
 Accéder à l'application via : http://localhost:5000
 
-##📁 Structure du Projet
+## 📁 Structure du Projet
 Plaintext
 
 ifri_mentorlink/
