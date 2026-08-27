@@ -1,7 +1,7 @@
 IFRI MentorLink
 Plateforme de mise en relation mentor-mentoré pour les étudiants de l'IFRI.
 
-Technique d'empilement
+Technique d'empilement 
 
 Côté serveur : Python / Flask + Flask-SocketIO 
 
