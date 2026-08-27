@@ -1,0 +1,154 @@
+{% extends "base.html" %}
+{% block title %}Profil de {{ (utilisateur or user).prenom }} — IFRI MentorLink{% endblock %}
+
+{% block content %}
+{% set u = utilisateur or user or membre %}
+<div class="page-header">
+  <div class="page-title">👤 Profil utilisateur</div>
+  <a href="javascript:history.back()" class="btn btn-ghost">← Retour</a>
+</div>
+
+<div class="page-body" style="max-width: 800px; margin: 0 auto;">
+  <!-- Carte d'en-tête du profil -->
+  <div class="card" style="margin-bottom: 1.5rem;">
+    <div style="display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap;">
+      
+      {% if u.photo_profil %}
+        <img src="{{ url_for('static', filename='uploads/' + u.photo_profil) }}" 
+             alt="Photo de {{ u.prenom }}" 
+             style="width: 85px; height: 85px; border-radius: 50%; object-fit: cover; border: 3px solid var(--blue); flex-shrink: 0;">
+      {% else %}
+        <div class="avatar avatar-lg avatar-blue" style="width: 85px; height: 85px; font-size: 1.8rem; flex-shrink: 0;">
+          {{ u.prenom[0]|upper }}{{ u.nom[0]|upper }}
+        </div>
+      {% endif %}
+
+      <div style="flex: 1; min-width: 200px;">
+        <h1 style="font-family: 'Syne', sans-serif; font-size: 1.5rem; font-weight: 800; margin: 0;">
+          {{ u.prenom }} {{ u.nom }}
+        </h1>
+        <div style="color: var(--text-soft); font-size: 0.88rem; margin-top: 0.25rem;">
+          {{ u.niveau }} — {{ u.filiere }}
+        </div>
+        <div style="color: var(--text-soft); font-size: 0.85rem; margin-top: 0.25rem;">
+          📧 {{ u.email }}
+        </div>
+
+        <!-- Numéro de téléphone -->
+        {% set phone = u.telephone if u.telephone is defined else (u.numero if u.numero is defined else (u.phone if u.phone is defined else None)) %}
+        {% if phone %}
+          <div style="color: var(--text-soft); font-size: 0.85rem; margin-top: 0.25rem;">
+            📞 <a href="tel:{{ phone }}" style="color: inherit; text-decoration: none;">{{ phone }}</a>
+          </div>
+        {% endif %}
+
+        <!-- Badge de Compatibilité Matching -->
+        {% set comp_score = score if score is defined else (compatibilite if compatibilite is defined else (match_score if match_score is defined else None)) %}
+        {% if comp_score is not none and u.id != current_user.id %}
+          <div style="display: inline-flex; align-items: center; gap: 0.4rem; background: rgba(249, 115, 22, 0.12); border: 1px solid var(--orange); color: var(--orange); font-weight: 700; font-size: 0.82rem; padding: 0.35rem 0.8rem; border-radius: 999px; margin-top: 0.6rem;">
+            🎯 {{ "%.0f"|format(comp_score) if comp_score is number else comp_score }}% de compatibilité
+          </div>
+        {% endif %}
+      </div>
+
+      {% if u.id != current_user.id %}
+        <a href="{{ url_for('messages.ouvrir_conversation', user_id=u.id) }}" class="btn btn-blue">
+          💬 Envoyer un message
+        </a>
+      {% endif %}
+    </div>
+
+    {% if u.bio %}
+      <hr style="margin: 1.25rem 0; border: none; border-top: 1px solid var(--gray-mid);">
+      <p style="color: var(--text-mid); font-size: 0.92rem; line-height: 1.6; margin: 0;">
+        {{ u.bio }}
+      </p>
+    {% endif %}
+  </div>
+
+  <!-- Grille des compétences -->
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-bottom: 1.5rem;">
+    
+    <!-- Compétences maîtrisées -->
+    <div class="card">
+      <h2 style="font-family: 'Syne', sans-serif; font-size: 1.05rem; font-weight: 700; margin-bottom: 1rem; color: var(--blue);">
+        🎓 Compétences maîtrisées
+      </h2>
+      {% set comps_m = [] %}
+      {% if u.maitrisees is defined %}
+        {% set comps_m = u.maitrisees() if u.maitrisees is callable else u.maitrisees %}
+      {% elif u.competences is defined %}
+        {% set comps_m = u.competences %}
+      {% endif %}
+
+      {% if comps_m %}
+        <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+          {% for c in comps_m %}
+            <span class="tag tag-blue" style="padding: 0.4rem 0.75rem; font-size: 0.82rem;">
+              {{ c.nom if c.nom is defined else (c.competence.nom if c.competence is defined else c) }}
+            </span>
+          {% endfor %}
+        </div>
+      {% else %}
+        <p style="color: var(--text-soft); font-size: 0.85rem; margin: 0;">Aucune compétence maîtrisée renseignée.</p>
+      {% endif %}
+    </div>
+
+    <!-- Compétences recherchées / Besoins -->
+    <div class="card">
+      <h2 style="font-family: 'Syne', sans-serif; font-size: 1.05rem; font-weight: 700; margin-bottom: 1rem; color: var(--orange);">
+        🎯 Compétences recherchées
+      </h2>
+      {% set comps_s = [] %}
+      {% if u.souhaitees is defined %}
+        {% set comps_s = u.souhaitees() if u.souhaitees is callable else u.souhaitees %}
+      {% elif u.besoins is defined %}
+        {% set comps_s = u.besoins() if u.besoins is callable else u.besoins %}
+      {% elif u.lacunes is defined %}
+        {% set comps_s = u.lacunes() if u.lacunes is callable else u.lacunes %}
+      {% endif %}
+
+      {% if comps_s %}
+        <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+          {% for c in comps_s %}
+            <span class="tag tag-orange" style="padding: 0.4rem 0.75rem; font-size: 0.82rem;">
+              {{ c.nom if c.nom is defined else (c.competence.nom if c.competence is defined else c) }}
+            </span>
+          {% endfor %}
+        </div>
+      {% else %}
+        <p style="color: var(--text-soft); font-size: 0.85rem; margin: 0;">Aucun besoin en mentorat renseigné.</p>
+      {% endif %}
+    </div>
+
+  </div>
+
+  <!-- Bloc Disponibilités -->
+  <div class="card">
+    <h2 style="font-family: 'Syne', sans-serif; font-size: 1.05rem; font-weight: 700; margin-bottom: 1rem; color: var(--blue);">
+      📅 Disponibilités
+    </h2>
+    {% set dispos = [] %}
+    {% if u.disponibilites is defined %}
+      {% set dispos = u.disponibilites() if u.disponibilites is callable else u.disponibilites %}
+    {% elif u.dispo is defined %}
+      {% set dispos = u.dispo %}
+    {% elif disponibilites is defined %}
+      {% set dispos = disponibilites %}
+    {% endif %}
+
+    {% if dispos %}
+      <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+        {% for d in dispos %}
+          <span class="tag" style="padding: 0.45rem 0.8rem; font-size: 0.82rem; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--gray-mid); color: var(--text-mid);">
+            🕒 {{ d.jour if d.jour is defined else d }} {% if d.creneau is defined %}— {{ d.creneau }}{% elif d.heure_debut is defined %}({{ d.heure_debut }} - {{ d.heure_fin }}){% endif %}
+          </span>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p style="color: var(--text-soft); font-size: 0.85rem; margin: 0;">Aucune disponibilité renseignée.</p>
+    {% endif %}
+  </div>
+
+</div>
+{% endblock %}
