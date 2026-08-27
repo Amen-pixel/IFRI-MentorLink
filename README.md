@@ -1,86 +1,71 @@
-IFRI MentorLink
-Plateforme de mise en relation mentor-mentoré pour les étudiants de l'IFRI.
+Markdown
+# 🎓 IFRI MentorLink
 
-Technique d'empilement 
+> Plateforme de mise en relation mentor-mentoré pour les étudiants de l'IFRI.
 
-Côté serveur : Python / Flask + Flask-SocketIO 
+---
 
-Base de données : MySQL (via SQLAlchemy + PyMySQL) 
+## 🛠️ Stack Technique
 
-Authentification : Flask-Login + Flask-Bcrypt
+* **Côté serveur :** Python / Flask + Flask-SocketIO
+* **Base de données :** MySQL (via SQLAlchemy + PyMySQL)
+* **Authentification :** Flask-Login + Flask-Bcrypt
+* **Temps réel :** SocketIO (messagerie instantanée)
 
-Temps réel : SocketIO (messagerie instantanée)
+---
 
-Installation
+## 🚀 Installation
 
-1. Cloner le projet
-
-2. 
-git clone https://github.com/VOTRE_COMPTE/PIL1_2526_XX.git
-
+### 1. Cloner le projet
+```bash
+git clone [https://github.com/VOTRE_COMPTE/PIL1_2526_XX.git](https://github.com/VOTRE_COMPTE/PIL1_2526_XX.git)
 cd PIL1_2526_XX
-
-. Créer l'environnement virtuel
+2. Créer l'environnement virtuel
+Bash
 python -m venv venv
 
 # Windows
 venv\Scripts\activate
+
 # Linux / Mac
 source venv/bin/activate
-
 3. Installer les dépendances
+Bash
 pip install -r requirements.txt
-
-5. Configurer les variables d'environnement
+4. Configurer les variables d'environnement
+Bash
 cp .env.example .env
-
-# Éditer .env avec vos vraies valeurs
-
+# Éditer le fichier .env avec vos identifiants de base de données
 5. Créer la base de données
+Bash
 mysql -u root -p < schema.sql
-
 6. Lancer le serveur
+Bash
 python app.py
-Accéder à : http://localhost:5000
+Accéder à l'application via : http://localhost:5000
 
-Structure du projet
-
+📁 Structure du Projet
+Plaintext
 ifri_mentorlink/
-
 ├── app.py              # Application Flask principale
-
 ├── models.py           # Modèles SQLAlchemy
-
 ├── matching.py         # Algorithme de matching
-
 ├── schema.sql          # Schéma MySQL
-
 ├── requirements.txt
-
 ├── .env.example        # Template des variables d'environnement
-
 ├── .gitignore
-
 ├── routes/
-
 │   ├── auth.py         # Inscription / connexion
-
 │   ├── profil.py       # Dashboard, profil, compétences
-
 │   ├── matching.py     # Suggestions & offres
-
 │   └── messages.py     # Messagerie (SocketIO)
-
 ├── templates/          # Templates Jinja2
-
 └── static/             # CSS, JS, images
-
-Algorithme de matching
-
+🧮 Algorithme de Matching
 Le score de compatibilité est calculé ainsi :
 
 50 % — Couverture des lacunes du mentoré par les compétences du mentor
 
-30% — Proximité des filières
+30 % — Proximité des filières
 
-20% — Compatibilité des disponibilités horaires
+20 % — Compatibilité des disponibilités horaires
