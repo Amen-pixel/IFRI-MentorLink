@@ -21,7 +21,7 @@ Markdown
 git clone [https://github.com/VOTRE_COMPTE/PIL1_2526_XX.git](https://github.com/VOTRE_COMPTE/PIL1_2526_XX.git)
 cd PIL1_2526_XX
 
-###2. Créer l'environnement virtuel
+### 2. Créer l'environnement virtuel
 Bash
 python -m venv venv
 
