@@ -18,7 +18,7 @@ Markdown
 
 ### 1. Cloner le projet
 
-git clone [https://github.com/VOTRE_COMPTE/PIL1_2526_XX.git](https://github.com/VOTRE_COMPTE/IFRI-MentorLink.git)
+git clone [https://github.com/Amen-pixel/IFRI-MentorLink.git](https://github.com/VOTRE_COMPTE/IFRI-MentorLink.git)
 
 cd PIL1_2526_XX
 
