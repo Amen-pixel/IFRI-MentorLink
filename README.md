@@ -23,6 +23,7 @@ cd PIL1_2526_XX
 
 ### 2. Créer l'environnement virtuel
 Bash
+
 python -m venv venv
 
 # Windows
@@ -32,12 +33,16 @@ venv\Scripts\activate
 source venv/bin/activate
 
 ### 3. Installer les dépendances
+
 Bash
+
 pip install -r requirements.txt
 
 ### 4. Configurer les variables d'environnement
 Bash
+
 cp .env.example .env
+
 # Éditer le fichier .env avec vos identifiants de base de données
 
 ### 5. Créer la base de données
@@ -46,10 +51,13 @@ mysql -u root -p < schema.sql
 
 ### 6. Lancer le serveur
 Bash
+
 python app.py
+
 Accéder à l'application via : http://localhost:5000
 
 ## 📁 Structure du Projet
+
 Plaintext
 
 ifri_mentorlink/
