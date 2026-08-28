@@ -20,7 +20,7 @@ Markdown
 
 git clone https://github.com/Amen-pixel/IFRI-MentorLink
 
-cd PIL1_2526_XX
+cd PILI25-26
 
 ### 2. Créer l'environnement virtuel
 Bash
