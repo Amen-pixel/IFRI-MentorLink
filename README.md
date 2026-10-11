@@ -4,7 +4,7 @@
   <strong>Connecter les étudiants. Partager les connaissances. Réussir ensemble.</strong>
 </p>
 
-<p align="center">
+## <p align="center">
   <img src="https://img.shields.io/badge/Python-3.x-blue?logo=python&logoColor=white" alt="Python">
   <img src="https://img.shields.io/badge/Flask-Web%20Framework-black?logo=flask" alt="Flask">
   <img src="https://img.shields.io/badge/MySQL-Database-4479A1?logo=mysql&logoColor=white" alt="MySQL">
