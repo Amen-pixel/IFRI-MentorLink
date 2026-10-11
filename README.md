@@ -420,9 +420,9 @@ Des tests automatisés avec `pytest` peuvent être ajoutés afin de faciliter la
 
 IFRI MentorLink est un projet collaboratif réalisé par une équipe de six membres.
 
-La répartition ci-dessous propose une organisation du travail qui valorise particulièrement la contribution technique d'**Amen QUENUM**, tout en attribuant à chaque membre un domaine de responsabilité.
+.
 
-### 1. Amen QUENUM — Lead Developer & Architecte logiciel
+### 1. Amen QUENUM — Architecte logiciel
 
 **Responsabilité principale : architecture, backend et intégration globale.**
 
@@ -495,7 +495,7 @@ Missions proposées :
 - Préparation des exemples de démonstration.
 - Contribution à la présentation du projet.
 
-**Remarque :** cette répartition est une proposition d'organisation. Elle doit être adaptée au travail réellement effectué par chacun avant d'être utilisée comme compte rendu officiel des contributions individuelles.
+
 
 ---
 
