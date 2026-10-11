@@ -1,8 +1,8 @@
 # 🎓 IFRI MentorLink
 
-<p align="center">
-  <strong>Connecter les étudiants. Partager les connaissances. Réussir ensemble.</strong>
-</p>
+
+  ## Connecter les étudiants. Partager les connaissances. Réussir ensemble.</strong>
+
 
 <p align="center">
   <img src="https://img.shields.io/badge/Python-3.x-blue?logo=python&logoColor=white" alt="Python">
