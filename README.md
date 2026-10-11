@@ -4,7 +4,7 @@
   <strong>Connecter les étudiants. Partager les connaissances. Réussir ensemble.</strong>
 </p>
 
-## <p align="center">
+<p align="center">
   <img src="https://img.shields.io/badge/Python-3.x-blue?logo=python&logoColor=white" alt="Python">
   <img src="https://img.shields.io/badge/Flask-Web%20Framework-black?logo=flask" alt="Flask">
   <img src="https://img.shields.io/badge/MySQL-Database-4479A1?logo=mysql&logoColor=white" alt="MySQL">
@@ -15,7 +15,7 @@
 
 ---
 
-## 📌 1. Présentation du projet
+#📌 1. Présentation du projet
 
 **IFRI MentorLink** est une plateforme web de mise en relation entre mentors et mentorés, conçue pour faciliter l'entraide académique, le partage de compétences et l'accompagnement entre étudiants de l'Institut de Formation et de Recherche en Informatique (IFRI), à l'Université d'Abomey-Calavi (UAC).
 
