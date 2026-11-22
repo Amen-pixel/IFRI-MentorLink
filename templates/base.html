@@ -186,6 +186,16 @@
 <!-- ── Clic sur n'importe quelle photo de profil / image du chat : ouvre le visualiseur ci-dessus ── -->
 <style>
   img[src*="res.cloudinary.com"], img[src*="/static/uploads/"] { cursor: zoom-in; }
+
+  /* Visualiseur plein écran (reprise ici pour fonctionner même si main.css est ancien) */
+  .image-modal { display: none; position: fixed; z-index: 2000; top: 0; left: 0;
+                 width: 100vw; height: 100vh; background-color: rgba(0, 0, 0, 0.85);
+                 backdrop-filter: blur(5px); align-items: center; justify-content: center; }
+  .image-modal .modal-content { max-width: 85vw; max-height: 85vh; border-radius: 16px;
+                                object-fit: contain; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.8); }
+  .image-modal .close-modal { position: absolute; top: 20px; right: 30px; color: #fff;
+                              font-size: 40px; font-weight: bold; cursor: pointer; user-select: none; }
+  .image-modal .close-modal:hover { color: #ff6a00; }
 </style>
 <script>
   document.addEventListener('click', function (e) {
