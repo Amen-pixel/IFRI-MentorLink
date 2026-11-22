@@ -40,6 +40,26 @@ def create_app():
     with app.app_context():
         db.create_all()
 
+        # Remplit la liste des compétences si la table est vide
+        from models import Competence
+        if Competence.query.count() == 0:
+            competences = [
+                ("Python", "Programmation"), ("Java", "Programmation"),
+                ("C/C++", "Programmation"), ("JavaScript", "Programmation"),
+                ("PHP", "Programmation"), ("HTML/CSS", "Web"),
+                ("React", "Web"), ("Flask/Django", "Web"), ("Node.js", "Web"),
+                ("SQL/MySQL", "Bases de données"), ("PostgreSQL", "Bases de données"),
+                ("MongoDB", "Bases de données"), ("Algèbre linéaire", "Mathématiques"),
+                ("Probabilités", "Mathématiques"), ("Équations différentielles", "Mathématiques"),
+                ("Linux/Unix", "Systèmes"), ("Réseaux", "Systèmes"),
+                ("Arduino/IoT", "Systèmes"), ("Machine Learning", "Intelligence Artificielle"),
+                ("Deep Learning", "Intelligence Artificielle"),
+                ("Traitement d'images", "Intelligence Artificielle"),
+            ]
+            for nom, cat in competences:
+                db.session.add(Competence(nom=nom, categorie=cat))
+            db.session.commit()
+
     return app
 
 
