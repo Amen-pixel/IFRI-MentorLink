@@ -24,6 +24,9 @@ def create_app():
     bcrypt.init_app(app)
     socketio.init_app(app, cors_allowed_origins="*")
 
+    from storage import photo_url
+    app.jinja_env.globals["photo_url"] = photo_url
+
     login_manager.login_view    = "auth.login"
     login_message = "Veuillez vous connecter."
 
