@@ -1,7 +1,7 @@
 """
 models.py — Modèles de la base de données (SQLAlchemy)
 """
-from datetime import datetime
+from datetime import datetime, timedelta
 from flask_login import UserMixin
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
@@ -10,9 +10,13 @@ db = SQLAlchemy()
 login_manager = LoginManager()
 
 
+def heure_benin():
+    """Retourne la date et l'heure actuelles au Bénin (UTC+1 / GMT+1)."""
+    return datetime.utcnow() + timedelta(hours=1)
+
+
 @login_manager.user_loader
 def load_user(user_id):
-    # db.session.get() est la méthode recommandée (SQLAlchemy 2+)
     return db.session.get(User, int(user_id))
 
 
@@ -42,7 +46,7 @@ class User(UserMixin, db.Model):
     filiere          = db.Column(db.Enum("GL","IA","IM","SE_IoT","SI"), nullable=False)
     niveau           = db.Column(db.Enum("L1","L2","L3","M1","M2"),   nullable=False)
     bio              = db.Column(db.Text, default=None)
-    date_inscription = db.Column(db.DateTime, default=datetime.utcnow)
+    date_inscription = db.Column(db.DateTime, default=heure_benin)
     actif            = db.Column(db.Boolean, default=True)
 
     competences    = db.relationship("UserCompetence", backref="user",   lazy="dynamic")
@@ -97,7 +101,7 @@ class OffreMentorat(db.Model):
     format        = db.Column(db.Enum("presentiel","en_ligne","les_deux"), default="les_deux")
     description   = db.Column(db.Text, default=None)
     active        = db.Column(db.Boolean, default=True)
-    date_creation = db.Column(db.DateTime, default=datetime.utcnow)
+    date_creation = db.Column(db.DateTime, default=heure_benin)
 
     competence = db.relationship("Competence", backref="offres")
 
@@ -110,7 +114,7 @@ class Match(db.Model):
     mentore_id  = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
     score       = db.Column(db.Numeric(5, 2), nullable=False)
     statut      = db.Column(db.Enum("propose","accepte","refuse","termine"), default="propose")
-    date_match  = db.Column(db.DateTime, default=datetime.utcnow)
+    date_match  = db.Column(db.DateTime, default=heure_benin)
 
     mentor  = db.relationship("User", foreign_keys=[mentor_id],  backref="comme_mentor")
     mentore = db.relationship("User", foreign_keys=[mentore_id], backref="comme_mentore")
@@ -126,7 +130,7 @@ class Conversation(db.Model):
     id            = db.Column(db.Integer, primary_key=True)
     user1_id      = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
     user2_id      = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
-    date_creation = db.Column(db.DateTime, default=datetime.utcnow)
+    date_creation = db.Column(db.DateTime, default=heure_benin)
 
     user1    = db.relationship("User", foreign_keys=[user1_id])
     user2    = db.relationship("User", foreign_keys=[user2_id])
@@ -145,8 +149,8 @@ class Message(db.Model):
     conversation_id = db.Column(db.Integer, db.ForeignKey("conversations.id"), nullable=False)
     expediteur_id   = db.Column(db.Integer, db.ForeignKey("users.id"),         nullable=False)
     contenu         = db.Column(db.Text, nullable=True)
-    fichier_url     = db.Column(db.String(500), nullable=True, default=None)  # 👈 Ajout du champ fichier
+    fichier_url     = db.Column(db.String(500), nullable=True, default=None)
     lu              = db.Column(db.Boolean, default=False)
-    date_envoi      = db.Column(db.DateTime, default=datetime.utcnow)
+    date_envoi      = db.Column(db.DateTime, default=heure_benin)
 
     expediteur = db.relationship("User", foreign_keys=[expediteur_id])

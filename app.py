@@ -12,6 +12,32 @@ from extensions import socketio, bcrypt
 load_dotenv()
 
 
+def ajouter_colonnes_manquantes(db):
+    """Ajoute dans la base les colonnes présentes dans models.py mais absentes de la table
+    (create_all() ne modifie jamais une table qui existe déjà)."""
+    from sqlalchemy import inspect, text
+    try:
+        insp = inspect(db.engine)
+        for table in db.metadata.sorted_tables:
+            if not insp.has_table(table.name):
+                continue
+            existantes = {c["name"] for c in insp.get_columns(table.name)}
+            for col in table.columns:
+                if col.name in existantes:
+                    continue
+                sql = f"ALTER TABLE {table.name} ADD COLUMN {col.name} " \
+                      f"{col.type.compile(dialect=db.engine.dialect)} NULL"
+                if col.default is not None and getattr(col.default, "is_scalar", False):
+                    val = col.default.arg
+                    sql += f" DEFAULT {int(val) if isinstance(val, bool) else repr(val)}"
+                db.session.execute(text(sql))
+                print(f"[migration] colonne ajoutée : {table.name}.{col.name}")
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        print("[migration] ignorée :", e)
+
+
 def create_app():
     app = Flask(__name__)
     app.config["SECRET_KEY"]                     = os.getenv("SECRET_KEY", "dev-secret")
@@ -42,6 +68,7 @@ def create_app():
 
     with app.app_context():
         db.create_all()
+        ajouter_colonnes_manquantes(db)
 
         # Remplit la liste des compétences si la table est vide
         from models import Competence
