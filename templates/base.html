@@ -183,5 +183,33 @@
 
 {% block extra_js %}{% endblock %}
 
+<!-- ── Zoom photo (style WhatsApp) : clic sur une photo de profil ou une image du chat ── -->
+<div id="photo-zoom" onclick="this.classList.remove('open')">
+  <span class="photo-zoom-close">&#10005;</span>
+  <img id="photo-zoom-img" alt="Photo">
+</div>
+<style>
+  #photo-zoom { display:none; position:fixed; inset:0; z-index:9999;
+                background:rgba(0,0,0,.88); align-items:center; justify-content:center; }
+  #photo-zoom.open { display:flex; }
+  #photo-zoom img { max-width:90vw; max-height:85vh; border-radius:16px; object-fit:contain; }
+  .photo-zoom-close { position:absolute; top:20px; right:30px; color:#fff; font-size:2rem; cursor:pointer; }
+  img[src*="res.cloudinary.com"], img[src*="/static/uploads/"] { cursor:zoom-in; }
+</style>
+<script>
+  document.addEventListener('click', function (e) {
+    var img = e.target.closest('img');
+    if (!img) return;
+    var src = img.getAttribute('src') || '';
+    if (src.indexOf('res.cloudinary.com') === -1 && src.indexOf('/static/uploads/') === -1) return;
+    e.preventDefault();
+    document.getElementById('photo-zoom-img').src = src;
+    document.getElementById('photo-zoom').classList.add('open');
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') document.getElementById('photo-zoom').classList.remove('open');
+  });
+</script>
+
 </body>
 </html>
