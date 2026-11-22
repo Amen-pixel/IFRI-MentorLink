@@ -2,17 +2,32 @@
 routes/messages.py — Messagerie instantanée (Flask-SocketIO)
 """
 import os
-from flask import Blueprint, render_template, redirect, url_for, request, jsonify, current_app
+from datetime import timedelta
+from flask import Blueprint, render_template, redirect, url_for, request, jsonify, current_app, make_response
 from flask_login import login_required, current_user
 from flask_socketio import emit, join_room
 from werkzeug.utils import secure_filename
-from models import db, User, Conversation, Message
+from models import db, User, Conversation, Message, heure_benin
 from extensions import socketio
 
 messages_bp = Blueprint("messages", __name__)
 
 
 # ── Helpers ──────────────────────────────────────────────────
+
+def formater_date_badge(dt):
+    """Retourne 'Aujourd\'hui', 'Hier' ou la date 'JJ/MM/AAAA'."""
+    if not dt:
+        return ""
+    aujourdhui = heure_benin().date()
+    date_msg = dt.date()
+    if date_msg == aujourdhui:
+        return "Aujourd'hui"
+    elif date_msg == aujourdhui - timedelta(days=1):
+        return "Hier"
+    else:
+        return date_msg.strftime("%d/%m/%Y")
+
 
 def get_or_create_conversation(user1_id: int, user2_id: int) -> Conversation:
     """Retourne la conversation existante ou en crée une nouvelle."""
@@ -37,7 +52,7 @@ def room_id(conv_id: int) -> str:
 @messages_bp.route("/messages")
 @login_required
 def liste():
-    """Liste toutes les conversations de l'utilisateur."""
+    """Liste toutes les conversations triées par le plus récent message (style WhatsApp)."""
     convs = Conversation.query.filter(
         (Conversation.user1_id == current_user.id) |
         (Conversation.user2_id == current_user.id)
@@ -46,10 +61,14 @@ def liste():
     conversations = []
     for conv in convs:
         interlocuteur = conv.user2 if conv.user1_id == current_user.id else conv.user1
-        dernier_msg   = conv.messages.order_by(Message.date_envoi.desc()).first()
-        nb_non_lus    = conv.messages.filter_by(
+        
+        # Récupération directe du VRAI dernier message par son ID le plus récent
+        dernier_msg = Message.query.filter_by(conversation_id=conv.id).order_by(Message.id.desc()).first()
+        
+        nb_non_lus = conv.messages.filter_by(
             lu=False
         ).filter(Message.expediteur_id != current_user.id).count()
+
         conversations.append({
             "conv": conv,
             "interlocuteur": interlocuteur,
@@ -57,11 +76,17 @@ def liste():
             "non_lus": nb_non_lus,
         })
 
+    # Tri strict par l'ID du dernier message (le dernier message envoyé a l'ID le plus élevé)
     conversations.sort(
-        key=lambda c: c["dernier_msg"].date_envoi if c["dernier_msg"] else c["conv"].date_creation,
+        key=lambda c: c["dernier_msg"].id if c["dernier_msg"] else 0,
         reverse=True
     )
-    return render_template("messages.html", conversations=conversations)
+
+    response = make_response(render_template("messages.html", conversations=conversations))
+    response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    response.headers["Pragma"] = "no-cache"
+    response.headers["Expires"] = "0"
+    return response
 
 
 @messages_bp.route('/conversation', methods=['GET', 'POST'])
@@ -88,6 +113,7 @@ def ouvrir_conversation(user_id=None):
         interlocuteur=interlocuteur,
         conv=conv,
         historique=historique,
+        formater_date_badge=formater_date_badge
     )
 
 
@@ -115,62 +141,71 @@ def upload_fichier():
 
 # ── Événements SocketIO ───────────────────────────────────────
 
+@socketio.on("connect")
+def on_connect():
+    """Associe automatiquement le socket connecté au canal personnel de l'utilisateur."""
+    if current_user.is_authenticated:
+        user_room = f"user_{current_user.id}"
+        join_room(user_room)
+
+
 @socketio.on("rejoindre")
 def on_rejoindre(data):
-    """Le client rejoint la room de sa conversation."""
+    """Le client rejoint la room d'une conversation spécifique."""
     room_name = room_id(data["conv_id"])
     join_room(room_name)
-    print(f"🟢 [DEBUG SOCKET] L'utilisateur a rejoint la room : {room_name}")
 
 
 @socketio.on("envoyer_message")
 def on_message(data):
-    """
-    Reçoit un message du client, le persiste, et le diffuse
-    à tous les participants de la conversation.
-    """
-    print(f"🔵 [DEBUG SOCKET] Message reçu du frontend : {data}")
-    
+    """Reçoit un message du client, le persiste, et le diffuse aux participants."""
     try:
         conv_id_int = int(data["conv_id"])
         conv = db.session.get(Conversation, conv_id_int)
         
-        if conv is None:
-            print("🔴 [DEBUG SOCKET] Erreur : Conversation introuvable en BDD.")
-            return
-
-        if current_user.id not in (conv.user1_id, conv.user2_id):
-            print(f"🔴 [DEBUG SOCKET] Erreur : L'utilisateur {current_user.id} n'a pas le droit d'écrire ici.")
+        if conv is None or current_user.id not in (conv.user1_id, conv.user2_id):
             return
 
         contenu = data.get("contenu", "").strip()
         fichier_url = data.get("fichier_url")
 
         if not contenu and not fichier_url:
-            print("🔴 [DEBUG SOCKET] Annulation : Aucun texte ni fichier.")
             return
+
+        maintenant = heure_benin()
 
         msg = Message(
             conversation_id=conv.id,
             expediteur_id=current_user.id,
             contenu=contenu,
-            fichier_url=fichier_url
+            fichier_url=fichier_url,
+            date_envoi=maintenant
         )
         db.session.add(msg)
         db.session.commit()
-        print("🟢 [DEBUG SOCKET] Message sauvegardé avec succès dans la base de données !")
 
+        # Diffusion du message dans le chat
         emit("nouveau_message", {
             "id":            msg.id,
             "contenu":       msg.contenu,
-            "fichier_url":    msg.fichier_url,
+            "fichier_url":   msg.fichier_url,
             "expediteur_id": msg.expediteur_id,
             "prenom":        current_user.prenom,
             "nom":           current_user.nom,
             "date_envoi":    msg.date_envoi.strftime("%H:%M"),
         }, room=room_id(conv.id))
-        
-        print(f"🟢 [DEBUG SOCKET] Message renvoyé en temps réel dans la room {room_id(conv.id)}")
+
+        # Mise à jour en temps réel des listes de conversations
+        aperçu_msg = contenu if contenu else "📄 Fichier joint"
+        payload_liste = {
+            "conv_id":       conv.id,
+            "dernier_msg":   aperçu_msg,
+            "date_envoi":    msg.date_envoi.strftime("%H:%M"),
+            "expediteur_id": msg.expediteur_id
+        }
+
+        emit("update_conv_list", payload_liste, room=f"user_{conv.user1_id}")
+        emit("update_conv_list", payload_liste, room=f"user_{conv.user2_id}")
 
     except Exception as e:
-        print(f"🔴 [DEBUG SOCKET] ERREUR FATALE : {str(e)}")
+        print(f"🔴 [DEBUG SOCKET] ERREUR : {str(e)}")
