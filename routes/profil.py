@@ -6,6 +6,7 @@ from werkzeug.utils import secure_filename
 from models import db
 from models import User, Competence, UserCompetence, Disponibilite, OffreMentorat, Match, Conversation
 from algo_matching import proposer_matchs
+from storage import envoyer_image
 
 profil_bp = Blueprint("profil", __name__)
 
@@ -39,14 +40,7 @@ def profil():
         if 'photo_profil' in request.files:
             file = request.files['photo_profil']
             if file and file.filename != '' and extension_valide(file.filename):
-                ext = file.filename.rsplit('.', 1)[1].lower()
-                filename = secure_filename(f"avatar_user_{current_user.id}.{ext}")
-                
-                upload_folder = os.path.join(current_app.root_path, 'static', 'uploads')
-                os.makedirs(upload_folder, exist_ok=True)
-                
-                file.save(os.path.join(upload_folder, filename))
-                current_user.photo_profil = filename
+                current_user.photo_profil = envoyer_image(file, f"avatar_user_{current_user.id}")
 
         current_user.bio     = request.form.get("bio","").strip() or None
         current_user.filiere = request.form.get("filiere")
