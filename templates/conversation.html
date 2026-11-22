@@ -100,6 +100,26 @@
         background: #fdfdfd;
     }
 
+    /* Badge de séparation de date (Style WhatsApp) */
+    .date-separator {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 0.5rem 0;
+        width: 100%;
+    }
+
+    .date-separator span {
+        background-color: #eef2f7;
+        color: #555555;
+        font-size: 0.78rem;
+        font-weight: 600;
+        padding: 0.3rem 0.82rem;
+        border-radius: 12px;
+        border: 1px solid #e0e0e0;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    }
+
     .message-item {
         display: flex;
         width: 100%;
@@ -256,9 +276,10 @@
     
     <div class="chat-header">
         {% if interlocuteur.photo_profil %}
-            <img src="{{ url_for('static', filename='uploads/' + interlocuteur.photo_profil) }}" 
+            <img src="{{ photo_url(interlocuteur.photo_profil) }}" 
                  alt="Photo de {{ interlocuteur.prenom }}" 
-                 style="width: 45px; height: 45px; border-radius: 50%; object-fit: cover; flex-shrink: 0;">
+                 onclick="openImageModal(this.src, event)"
+                 style="width: 45px; height: 45px; border-radius: 50%; object-fit: cover; flex-shrink: 0; cursor: pointer;">
         {% else %}
             <div class="avatar">{{ interlocuteur.prenom[0]|upper }}{{ interlocuteur.nom[0]|upper }}</div>
         {% endif %}
@@ -272,20 +293,30 @@
 
     <!-- Liste des messages -->
     <div class="messages-list" id="messages-list">
+        {% set ns = namespace(last_date=None) %}
         {% for msg in historique %}
-        <div class="message-item {% if msg.expediteur_id == current_user.id %}sent{% else %}received{% endif %}">
-            <div class="message-content">
-                {% if msg.contenu %}
-                    <p>{{ msg.contenu }}</p>
-                {% endif %}
-                {% if msg.fichier_url %}
-                    <p style="margin-top: 0.4rem;">
-                        📄 <a href="{{ msg.fichier_url }}" target="_blank">Voir le document joint</a>
-                    </p>
-                {% endif %}
-                <span class="time">{{ msg.date_envoi.strftime('%H:%M') }}</span>
+            {% set date_label = formater_date_badge(msg.date_envoi) %}
+            
+            {% if date_label != ns.last_date %}
+                <div class="date-separator">
+                    <span>{{ date_label }}</span>
+                </div>
+                {% set ns.last_date = date_label %}
+            {% endif %}
+
+            <div class="message-item {% if msg.expediteur_id == current_user.id %}sent{% else %}received{% endif %}">
+                <div class="message-content">
+                    {% if msg.contenu %}
+                        <p>{{ msg.contenu }}</p>
+                    {% endif %}
+                    {% if msg.fichier_url %}
+                        <p style="margin-top: 0.4rem;">
+                            📄 <a href="{{ msg.fichier_url }}" target="_blank">Voir le document joint</a>
+                        </p>
+                    {% endif %}
+                    <span class="time">{{ msg.date_envoi.strftime('%H:%M') }}</span>
+                </div>
             </div>
-        </div>
         {% endfor %}
     </div>
 
@@ -373,6 +404,19 @@
                 filePreview.style.display = 'none';
             });
 
+            // Insère automatiquement le badge "Aujourd'hui" si la date a changé dans le tchat
+            function checkAndAddDateBadge() {
+                const dateBadges = messagesList.querySelectorAll(".date-separator span");
+                const lastBadge = dateBadges.length > 0 ? dateBadges[dateBadges.length - 1].textContent.trim() : null;
+
+                if (lastBadge !== "Aujourd'hui") {
+                    const separatorDiv = document.createElement('div');
+                    separatorDiv.className = 'date-separator';
+                    separatorDiv.innerHTML = '<span>Aujourd\'hui</span>';
+                    messagesList.appendChild(separatorDiv);
+                }
+            }
+
             // 3. Socket.IO & Envoi du message
             socket.emit('rejoindre', { 'conv_id': convId });
 
@@ -428,6 +472,8 @@
 
             // Réception en temps réel
             socket.on('nouveau_message', (data) => {
+                checkAndAddDateBadge();
+
                 const newMessageElement = document.createElement('div');
                 const isMe = data.expediteur_id === currentUserId;
                 newMessageElement.classList.add('message-item', isMe ? 'sent' : 'received');

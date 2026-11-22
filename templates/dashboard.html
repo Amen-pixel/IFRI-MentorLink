@@ -44,7 +44,7 @@
         <div class="card-flat" style="margin-bottom:0.75rem;display:flex;align-items:center;gap:1rem;">
           
           {% if s.mentor.photo_profil %}
-            <img src="{{ url_for('static', filename='uploads/' + s.mentor.photo_profil) }}" 
+            <img src="{{ photo_url(s.mentor.photo_profil) }}" 
                  alt="Photo de {{ s.mentor.prenom }}" 
                  style="width: 45px; height: 45px; border-radius: 50%; object-fit: cover; flex-shrink: 0;">
           {% else %}
