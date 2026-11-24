@@ -1,9 +1,11 @@
-# 🎓 IFRI MentorLink
+<img width="1900" height="920" alt="image" src="https://github.com/user-attachments/assets/b807e367-28e3-4506-9719-954f82d0f26a" /><img width="1900" height="920" alt="image" src="https://github.com/user-attachments/assets/d34771b3-19d0-483c-94ef-45f84d1308fe" /># 🎓 IFRI MentorLink
 
 
   ## Connecter les étudiants. Partager les connaissances. Réussir ensemble.</strong>
 
 ## Lien  de la démo : https://app.videas.com/share/NqAVOqrzMgnFESPwokMLBLVTm2y7c9IP-oHXAnOiOBg
+
+
 
 <p align="center">
   <img src="https://img.shields.io/badge/Python-3.x-blue?logo=python&logoColor=white" alt="Python">
@@ -15,6 +17,22 @@
 </p>
 
 ---
+
+| Dashboard | Connexion |
+|:---:|:---:|
+| <img src="docs/dashboard.png" width="100%"> | <img src="docs/Connexion.png" width="100%"> |
+
+| Accueil | Profil  |
+|:---:|:---:|
+| <img src="docs/Accueil.png" width="100%"> | <img src="docs/Profil.png" width="100%"> |
+
+| Matching | Message |
+|:---:|:---:|
+| <img src="docs/Matching.png" width="100%"> | <img src="docs/Message.png" width="100%"> |
+
+
+
+
 
 #📌 1. Présentation du projet
 
