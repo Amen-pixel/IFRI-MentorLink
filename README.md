@@ -22,7 +22,7 @@
 
 | Accueil | Profil  |
 |:---:|:---:|
-| <img src="docs/Accueil.png" width="100%"> | <img src="docs/Profil.png" width="100%"> |
+| <img src="docs/Accueil.png" width="100%"> | <img src="docs/Profil.png" width="100%"> | 
 
 | Matching | Message |
 |:---:|:---:|
