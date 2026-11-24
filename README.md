@@ -3,7 +3,7 @@
 
 ## Lien  de la démo : https://app.videas.com/share/NqAVOqrzMgnFESPwokMLBLVTm2y7c9IP-oHXAnOiOBg
 
-## Lien d'esssai de la plateforme : https://ifri-mentorlink-ytnl.onrender.com/
+## Lien d'esssai de la plateforme : https://ifri-mentorlink-ytnl.onrender.com/ (Render prendra un peu de temps veuillez attendre au moins 3 minutes)
 
 
 
