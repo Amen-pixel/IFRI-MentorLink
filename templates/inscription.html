@@ -8,15 +8,15 @@
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}"/>
   <style>
-    body { background: linear-gradient(135deg, #1d0d4f 0%, #131048 100%); min-height: 100vh; display: flex; flex-direction: column; }
+    body { background: var(--gradient); min-height: 100vh; display: flex; flex-direction: column; }
     .insc-nav {
-      background: var(--dark-navy); padding: 0 5%; height: 64px;
+      background: var(--bg-card); border-bottom: 3px solid transparent; border-image: var(--gradient) 1; padding: 0 5%; height: 64px;
       display: flex; align-items: center; justify-content: space-between;
     }
-    .insc-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.1rem; color: var(--white); }
-    .insc-logo span { color: var(--orange); }
-    .insc-nav a { color: rgba(8, 13, 44, 0.7); font-size: 0.85rem; transition: color var(--transition); }
-    .insc-nav a:hover { color: var(--white); }
+    .insc-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.1rem; color: var(--text-main); }
+    .insc-logo span { background: var(--violet-deep); color: var(--cyan-bright); padding: 1px 7px; border-radius: 5px; }
+    .insc-nav a { color: var(--text-soft); font-weight: 600; font-size: 0.85rem; transition: color var(--transition); }
+    .insc-nav a:hover { color: var(--blue); }
 
     .main-container {
       flex: 1; max-width: 1000px; width: 100%; margin: 2rem auto;
@@ -25,11 +25,11 @@
     }
     .form-section { flex: 2.5; padding: 2.5rem; }
     .info-sidebar {
-      flex: 1; background: var(--blue);
+      flex: 1; background: var(--gradient-dark);
       padding: 2.5rem 2rem; color: var(--white);
       display: flex; flex-direction: column; gap: 2rem;
     }
-    .info-sidebar h3 { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1.1rem; margin-bottom: 0.75rem; }
+    .info-sidebar h3 { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1.1rem; margin-bottom: 0.75rem; color: var(--cyan-bright); }
     .info-item { display: flex; gap: 0.75rem; align-items: flex-start; font-size: 0.85rem; line-height: 1.6; opacity: 0.9; }
     .info-item .ico { font-size: 1.2rem; flex-shrink: 0; }
 
@@ -47,7 +47,7 @@
       transition: all 0.3s;
     }
     .stepper-step.active .step-circle { background: var(--blue); color: var(--white); border-color: var(--blue); }
-    .stepper-step.done .step-circle { background: #12123c; color: var(--green); border-color: var(--green); }
+    .stepper-step.done .step-circle { background: var(--green-light); color: var(--green-dark); border-color: var(--green); }
     .step-label { font-size: 0.72rem; color: var(--text-soft); margin-top: 0.3rem; font-weight: 600; }
     .stepper-step.active .step-label { color: var(--blue); }
 
