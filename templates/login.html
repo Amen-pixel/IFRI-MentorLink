@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}"/>
   <style>
     body {
-      background: linear-gradient(135deg, #0d141e 0%, #0c1423 100%);
+      background: var(--gradient);
       min-height: 100vh; display: flex; flex-direction: column;
       justify-content: center; align-items: center; padding: 2rem;
     }
@@ -19,7 +19,7 @@
       overflow: hidden; border: 1.5px solid var(--gray-mid);
     }
     .auth-header {
-      background: var(--dark-navy); padding: 1.75rem;
+      background: var(--bg-card); padding: 1.75rem;
       text-align: center;
     }
     .auth-logo {
@@ -27,11 +27,11 @@
       display: flex; align-items: center; justify-content: center; gap: 0.5rem;
     }
     .auth-logo img { height: 36px; }
-    .auth-logo .ifri   { color: var(--blue); }
-    .auth-logo .mentor { color: var(--orange); }
-    .auth-subtitle { color: rgba(26, 2, 2, 0.6); font-size: 0.82rem; margin-top: 0.4rem; }
+    .auth-logo .ifri   { color: var(--text-main); }
+    .auth-logo .mentor { background: var(--violet-deep); color: var(--cyan-bright); padding: 1px 8px; border-radius: 6px; }
+    .auth-subtitle { color: var(--text-soft); font-size: 0.82rem; margin-top: 0.4rem; }
     .auth-body { padding: 2rem 1.75rem; }
-    .auth-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1.2rem; margin-bottom: 1.5rem; text-align: center; }
+    .auth-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1.2rem; margin-bottom: 1.5rem; text-align: center; color: var(--text-main); }
     .auth-footer { text-align: center; margin-top: 1.25rem; font-size: 0.85rem; color: var(--text-soft); }
     .auth-footer a { color: var(--blue); font-weight: 600; }
     .forgot { font-size: 0.8rem; color: var(--blue); text-align: right; display: block; margin-top: 0.3rem; }
