@@ -11,10 +11,10 @@
         height: calc(100vh - 120px);
         max-width: 900px;
         margin: 0 auto;
-        background: #ffffff;
+        background: var(--bg-card);
         border-radius: 16px;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-        border: 1px solid #eaeaea;
+        box-shadow: var(--shadow);
+        border: 1.5px solid var(--border-color);
         overflow: hidden;
     }
 
@@ -22,16 +22,16 @@
         display: flex;
         align-items: center;
         padding: 1.25rem 1.5rem;
-        background: #f8f9fa;
-        border-bottom: 1px solid #eaeaea;
+        background: var(--gradient-dark);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
         gap: 1rem;
     }
 
     .chat-header .avatar {
         width: 45px;
         height: 45px;
-        background: #1405ea;
-        color: white;
+        background: #FFFFFF;
+        color: var(--violet);
         border-radius: 50%;
         display: flex;
         align-items: center;
@@ -47,20 +47,20 @@
     .interlocuteur-info h2 {
         font-size: 1.1rem;
         margin: 0;
-        color: #1a1a1a;
+        color: #FFFFFF;
         font-family: 'Syne', sans-serif;
     }
 
     .interlocuteur-info p {
         font-size: 0.85rem;
-        color: #666;
+        color: rgba(255, 255, 255, 0.92);
         margin: 0;
     }
 
     .btn-profil {
         padding: 0.5rem 1rem;
-        background: #eef2f7;
-        color: #0606e4;
+        background: #FFFFFF;
+        color: var(--accent);
         border-radius: 8px;
         text-decoration: none;
         font-weight: 600;
@@ -69,7 +69,7 @@
     }
 
     .btn-profil:hover {
-        background: #d8e2ed;
+        background: var(--accent-light);
     }
 
     .btn-retour-container {
@@ -78,7 +78,7 @@
 
     .btn-retour {
         display: inline-block;
-        color: #666;
+        color: var(--text-soft);
         text-decoration: none;
         font-weight: 600;
         font-size: 0.9rem;
@@ -86,7 +86,7 @@
     }
 
     .btn-retour:hover {
-        color: #4e05f8;
+        color: var(--accent); text-decoration: underline;
     }
 
     /* Liste des messages déroulante */
@@ -97,7 +97,7 @@
         display: flex;
         flex-direction: column;
         gap: 1rem;
-        background: #fdfdfd;
+        background: var(--bg-card-flat);
     }
 
     /* Badge de séparation de date (Style WhatsApp) */
@@ -110,13 +110,13 @@
     }
 
     .date-separator span {
-        background-color: #eef2f7;
-        color: #555555;
+        background-color: var(--accent-light);
+        color: var(--violet-ink);
         font-size: 0.78rem;
         font-weight: 600;
         padding: 0.3rem 0.82rem;
         border-radius: 12px;
-        border: 1px solid #e0e0e0;
+        border: 1px solid var(--border-color);
         box-shadow: 0 1px 3px rgba(0,0,0,0.04);
     }
 
@@ -142,14 +142,15 @@
     }
 
     .message-item.sent .message-content {
-        background: #0b04ee;
-        color: white;
+        background: var(--gradient-dark);
+        color: #FFFFFF;
         border-bottom-right-radius: 4px;
     }
 
     .message-item.received .message-content {
-        background: #f1f3f5;
-        color: #151618;
+        background: var(--bg-card);
+        border: 1px solid var(--border-color);
+        color: var(--text-main);
         border-bottom-left-radius: 4px;
     }
 
@@ -179,16 +180,16 @@
         align-items: center;
         justify-content: space-between;
         padding: 0.6rem 1.5rem;
-        background: #f0f4f8;
-        border-top: 1px solid #eaeaea;
+        background: var(--accent-light);
+        border-top: 1px solid var(--border-color);
         font-size: 0.85rem;
-        color: #333;
+        color: var(--text-main);
     }
 
     .file-preview .btn-remove-file {
         background: none;
         border: none;
-        color: #e11d48;
+        color: var(--red-dark);
         cursor: pointer;
         font-weight: bold;
         font-size: 1rem;
@@ -199,8 +200,8 @@
         position: relative;
         display: flex;
         padding: 1rem 1.5rem;
-        background: #ffffff;
-        border-top: 1px solid #eaeaea;
+        background: var(--bg-card);
+        border-top: 1px solid var(--border-color);
         gap: 0.5rem;
         align-items: center;
     }
@@ -221,27 +222,27 @@
     .message-form input[type="text"] {
         flex-grow: 1;
         padding: 0.85rem 1.2rem;
-        border: 1px solid #dcedf8;
+        border: 1.5px solid var(--border-input);
         border-radius: 10px;
         outline: none;
         font-size: 0.95rem;
-        background: #ffffff;
-        color: #1a1a1a;
+        background: var(--bg-card);
+        color: var(--text-main);
         transition: all 0.2s;
     }
 
     /* Focus : fond blanc et texte sombre lisible */
     .message-form input[type="text"]:focus {
-        border-color: #0125f4;
+        border-color: var(--accent);
         background: #ffffff;
-        color: #1a1a1a;
-        box-shadow: 0 0 0 3px rgba(1, 37, 244, 0.15);
+        color: var(--text-main);
+        box-shadow: 0 0 0 3px rgba(27, 200, 232, 0.4);
     }
 
     .message-form button[type="submit"] {
         padding: 0.85rem 1.5rem;
-        background: #0125f4;
-        color: white;
+        background: var(--accent);
+        color: var(--on-accent);
         border: none;
         border-radius: 10px;
         font-weight: 600;
@@ -252,7 +253,7 @@
     }
 
     .message-form button[type="submit"]:hover {
-        background: #0378ee;
+        background: var(--accent-dark);
     }
 
     /* Menu émojis */
@@ -276,7 +277,7 @@
     
     <div class="chat-header">
         {% if interlocuteur.photo_profil %}
-            <img src="{{ photo_url(interlocuteur.photo_profil) }}" 
+            <img src="{{ url_for('static', filename='uploads/' + interlocuteur.photo_profil) }}" 
                  alt="Photo de {{ interlocuteur.prenom }}" 
                  onclick="openImageModal(this.src, event)"
                  style="width: 45px; height: 45px; border-radius: 50%; object-fit: cover; flex-shrink: 0; cursor: pointer;">
