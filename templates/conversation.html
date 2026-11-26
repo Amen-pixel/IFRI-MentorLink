@@ -277,7 +277,7 @@
     
     <div class="chat-header">
         {% if interlocuteur.photo_profil %}
-            <img src="{{ url_for('static', filename='uploads/' + interlocuteur.photo_profil) }}" 
+            <img src="{{ photo_url(interlocuteur.photo_profil) }}" 
                  alt="Photo de {{ interlocuteur.prenom }}" 
                  onclick="openImageModal(this.src, event)"
                  style="width: 45px; height: 45px; border-radius: 50%; object-fit: cover; flex-shrink: 0; cursor: pointer;">
