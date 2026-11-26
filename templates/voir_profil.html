@@ -14,7 +14,7 @@
     <div style="display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap;">
       
       {% if u.photo_profil %}
-        <img src="{{ url_for('static', filename='uploads/' + u.photo_profil) }}" 
+        <img src="{{ photo_url(u.photo_profil) }}" 
              alt="Photo de {{ u.prenom }}" 
              style="width: 85px; height: 85px; border-radius: 50%; object-fit: cover; border: 3px solid var(--blue); flex-shrink: 0;">
       {% else %}
